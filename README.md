@@ -1,8 +1,12 @@
 # EC App
 
+## デモ
+
+http://ec2-54-249-81-74.ap-northeast-1.compute.amazonaws.com:8080
+
 ## 概要
 
-会員登録したユーザーが商品を購入することができるECサイトです。
+会員登録したユーザーが商品を購入することができる EC サイトです。
 
 好きな商品を一覧から選択して、購入したい個数を入力して購入画面で金額を確認して購入することができます。
 
@@ -28,19 +32,20 @@
 - MySQL
 - Tailwind CSS
 - JavaScript
+- AWS
 
 ## セットアップ手順
 
 1. **リポジトリをクローン**
 
-2. **Dockerコンテナを起動**  
-    docker-compose.ymlをもとにMySQLコンテナを起動します。
+2. **Docker コンテナを起動**  
+   docker-compose.yml をもとに MySQL コンテナを起動します。
 
 3. **接続情報を設定**  
-   src/main/resources/application.ymlにDBの接続情報を適宜変更します。
+   src/main/resources/application.yml に DB の接続情報を適宜変更します。
 
 4. **開発サーバーを起動**  
-    gradle bootRunでアプリケーションを起動します。
+   gradle bootRun でアプリケーションを起動します。
 
 5. **アプリケーションにアクセス**  
    ブラウザで `http://localhost:8080` を開きます。
