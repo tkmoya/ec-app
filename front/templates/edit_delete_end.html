@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員削除完了 | ECサイト</title>
+    <link rel="stylesheet" href="../static/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+<header th:fragment="pageHeader">
+    <div class="site-title">
+        <a href="/">ECショップ</a></div>
+    <div class="mr-16">
+        <th:block th:if="${session['userId'] == null}">
+            「ゲスト」さん
+        </th:block>
+        <th:block th:if="${session['userId'] != null}">
+            「 [[${session.editFormModel.name}]] 」さん
+        </th:block>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-check-circle"></i>
+            会員削除完了
+        </h1>
+
+        <div class="inner-container complete-container text-center">
+            <div class="complete-icon red">✓</div>
+
+            <h2 class="complete-message">会員削除が完了しました</h2>
+
+            <p class="complete-description">
+                会員情報の削除が正常に完了しました。<br>
+                ご利用いただきありがとうございました。
+            </p>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="menu-btn" onClick="location.href='menu'">
+                    <i class="fas fa-home"></i>
+                    メニューへ戻る
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:fragment="pageFooter">
+    <p>&copy; 2025 ECショップ All Rights Reserved.</p>
+</footer>
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カート | ECサイト</title>
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript">
+        // action動的変更
+        function goShopping() {
+            document.getElementById("addProductForm").action = "shopping_check";
+        }
+    </script>
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+
+<main>
+    <div class="container con-w">
+        <h1 class="page-title">
+            <i class="fas fa-shopping-cart"></i>
+            カート
+        </h1>
+        <div class="inner-container">
+            <form action="cart_list" method="POST" id="addProductForm">
+                <table class="cart-table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all" class="select-checkbox"></th>
+                        <th>商品コード</th>
+                        <th>商品名</th>
+                        <th>販売元</th>
+                        <th>価格</th>
+                        <th>購入数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="product : ${session.selectProductMap}">
+                        <tr>
+                            <td><input type="checkbox" name="selectProductCode" th:value="${product.key}"
+                                       class="select-checkbox"></td>
+                            <td>[[${product.key}]]</td>
+                            <td>[[${product.value.productName}]]</td>
+                            <td>[[${product.value.maker}]]</td>
+                            <td>[[${product.value.unitPrice}]]</td>
+                            <td><input type="text" th:name="${product.key}" th:value="${product.value.productCnt}"
+                                       class="quantity-input"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
+                <th:block th:if="${session.selectProductMap != null}">
+                    <div class="btn-group">
+                        <button type="button" onclick="location.href='menu'" class="btn btn-primary">
+                            <i class="fas fa-home"></i>
+                            メニューへ戻る
+                        </button>
+
+                        <button type="submit" name="remove" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                            選択した商品を取り消し
+                        </button>
+                        <button type="submit" name="delete" class="btn btn-light">
+                            <i class="fas fa-times"></i>
+                            買い物をやめる
+                        </button>
+                        <button type="submit" name="order" onclick="goShopping();" class="btn btn-success">
+                            <i class="fas fa-check-circle"></i>
+                            注文する
+                        </button>
+                    </div>
+                </th:block>
+                <span id="choiseErrMesse" class="error-message">[[${error}]]</span>
+            </form>
+        </div>
+    </div>
+</main>
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+<script>
+    // 全選択チェックボックスの処理
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('tbody .select-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+</script>
+</body>
+</html>

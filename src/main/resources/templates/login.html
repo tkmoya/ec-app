@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン | ECサイト</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+
+<main>
+    <div class="container login-container-wrapper">
+        <div class="login-container">
+            <h1 class="login-title">ログイン</h1>
+
+            <form id="loginForm" action="login" method="post" th:object="${loginFormModel}">
+                <label class="login-label">[[${message}]]</label>
+                <div class="form-group mb-15">
+                    <label class="login-label" for="memberNo">会員NO</label>
+                    <input class="login-input" type="text" id="memberNo" th:field="*{memberNo}" required>
+                    <span class="text-red-600" th:errors="*{memberNo}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="login-label" for="password">パスワード</label>
+                    <input class="login-input" type="password" id="password" name="password" required>
+                    <span class="text-red-600" th:errors="*{password}"></span>
+                </div>
+
+                <div class="btn-group flex flex-between">
+                    <button type="submit" class="btn btn-primary">ログイン</button>
+                    <button type="reset" class="btn btn-light">クリア</button>
+                </div>
+            </form>
+
+            <div class="register-link">
+                <p>新規会員の方は<a href="register_user" class="text-blue-500 underline">こちら</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録完了 | ECサイト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+<header th:fragment="pageHeader">
+    <div class="site-title">
+        <a href="/">ECショップ</a></div>
+    <div class="mr-16">
+        <th:block th:if="${session['userId'] == null}">
+            「ゲスト」さん
+        </th:block>
+        <th:block th:if="${session['userId'] != null}">
+            「 [[${session.editFormModel.name}]] 」さん
+        </th:block>
+    </div>
+
+</header>
+<main>
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-check-circle"></i>
+            会員登録完了
+        </h1>
+
+        <div class="inner-container complete-container text-center">
+            <div class="complete-icon green">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <h2 class="complete-message">会員登録が完了しました</h2>
+
+            <p class="complete-description">
+                ECショップの会員登録が正常に完了しました。<br>
+                ご登録いただきありがとうございます。<br>
+                以下の会員番号は大切に保管してください。
+            </p>
+
+            <div class="generated-number">
+                会員No: <span th:text="${registerFormModel.memberNo}" id="member-id">100</span>
+            </div>
+
+<!--            <div class="member-info">-->
+<!--                <div class="member-number">-->
+<!--                    <span>会員No：</span>-->
+<!--                    <form id="registerEndForm" action="register_end" method="GET">-->
+<!--                        <span th:text="${registerFormModel.memberNo}" class="member-number-value" id="member-id">100</span>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="menu-btn" onClick="location.href='menu'">
+                    <i class="fas fa-home"></i>
+                    メニュー画面に戻る
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:fragment="pageFooter">
+    <p>&copy; 2025 ECショップ All Rights Reserved.</p>
+</footer>
+</body>
+</html>

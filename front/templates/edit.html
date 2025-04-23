@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員情報編集 | ECサイト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <script type="text/javascript">
+        // action動的変更
+        function goUpdate() {
+            document.getElementById("form").action = "edit_update";
+        }
+
+        function goDelete() {
+            document.getElementById("form").action = "edit_delete_check";
+        }
+    </script>
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+<header th:fragment="pageHeader">
+    <div class="site-title">
+        <a href="/">ECショップ</a></div>
+    <div class="mr-16">
+        <th:block th:if="${session['userId'] == null}">
+            「ゲスト」さん
+        </th:block>
+        <th:block th:if="${session['userId'] != null}">
+            「 [[${session.editFormModel.name}]] 」さん
+        </th:block>
+    </div>
+
+</header>
+<hr/>
+<main>
+<div class="container">
+    <h1 class="page-title">
+        <i class="fas fa-user-edit"></i>
+        会員情報編集
+    </h1>
+
+    <div class="inner-container">
+        <form
+                id="form"
+                name="form"
+                method="POST"
+                th:object="${editFormModel}"
+        >
+            <div class="form-section">
+                <h2 class="section-title">会員情報</h2>
+
+                <table class="info-table">
+                    <tr>
+                        <th>会員No</th>
+                        <td>
+                            <span th:text="*{memberNo}"/>
+                            <input
+                                    type="hidden"
+                                    th:field="*{memberNo}"
+                                    name="memno"
+                                    id="memno"
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>氏名</th>
+                        <td>
+                            <span th:text="*{name}"/>
+                            <input type="hidden" th:field="*{name}" name="name" id="name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>年齢</th>
+                        <td>
+                            <span th:text="*{age}"/>
+                            <input type="hidden" th:field="*{age}" name="age" id="age"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>性別</th>
+                        <td>
+                            <th:block th:if="*{sex == 'm'}">
+                                <span>男性</span>
+                            </th:block>
+                            <th:block th:if="*{sex == 'f'}">
+                                <span>女性</span>
+                            </th:block>
+                            <input type="hidden" th:field="*{sex}" name="sex" id="sex"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>郵便番号</th>
+                        <td>
+                            <span th:text="*{zip}"/>
+                            <input type="hidden" th:field="*{zip}" name="zip" id="zip"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>住所</th>
+                        <td>
+                            <span th:text="*{address}"/>
+                            <input
+                                    type="hidden"
+                                    th:field="*{address}"
+                                    name="address"
+                                    id="address"
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>電話番号</th>
+                        <td>
+                            <span th:text="*{tel}"/>
+                            <input type="hidden" th:field="*{tel}" name="tel" id="tel"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>登録日</th>
+                        <td>
+                            <span th:text="*{registerDate}"/>
+                            <input
+                                    type="hidden"
+                                    th:field="*{registerDate}"
+                                    name="regdate"
+                                    id="regdate"
+                            />
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="btn-group">
+                    <button
+                            type="submit"
+                            name="update"
+                            class="btn btn-primary"
+                            onclick="goUpdate();"
+                    >
+                        <i class="fas fa-save"></i>
+                        修正する
+                    </button>
+                    <button
+                            type="submit"
+                            name="delete"
+                            class="btn btn-danger"
+                            onclick="goDelete();"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                        削除する
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-light"
+                            onclick="location.href='menu'"
+                    >
+                        <i class="fas fa-arrow-left"></i>
+                        戻る
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</main>
+<footer th:fragment="pageFooter">
+    <p>&copy; 2025 ECショップ All Rights Reserved.</p>
+</footer>
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+</body>
+</html>

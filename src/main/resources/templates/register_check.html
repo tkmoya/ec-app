@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録確認 | ECサイト</title>
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+
+<main>
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-clipboard-check"></i>
+            会員登録確認
+        </h1>
+
+        <div class="inner-container">
+            <div class="form-section">
+                <h2 class="section-title">会員情報</h2>
+
+                <form action="register_end" method="POST" th:object="${registerFormModel}">
+                    <input type="hidden" th:field="*{password}" name="password"/>
+
+                    <table class="info-table">
+                        <tr>
+                            <th>氏名</th>
+                            <td>
+                                <span th:text="*{name}"/>
+                                <input type="hidden" th:field="*{name}" name="name" id="name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>年齢</th>
+                            <td>
+                                <span th:text="*{age}"/>
+                                <input type="hidden" th:field="*{age}" name="age" id="age"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>性別</th>
+                            <td>
+                                <th:block th:if="*{sex == 'm'}">
+                                    <span>男性</span>
+                                </th:block>
+                                <th:block th:if="*{sex == 'f'}">
+                                    <span>女性</span>
+                                </th:block>
+                                <input type="hidden" th:field="*{sex}" name="sex" id="sex"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>郵便番号</th>
+                            <td>
+                                <span th:text="*{zip}"/>
+                                <input type="hidden" th:field="*{zip}" name="zip" id="zip"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>住所</th>
+                            <td>
+                                <span th:text="*{address}"/>
+                                <input type="hidden" th:field="*{address}" name="address" id="address"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>電話番号</th>
+                            <td>
+                                <span th:text="*{tel}"/>
+                                <input type="hidden" th:field="*{tel}" name="tel" id="tel"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="btn-group">
+                        <button type="submit" id="registerUserBtn" class="btn btn-primary">
+                            <i class="fas fa-user-check"></i>
+                            登録する
+                        </button>
+                        <button type="button" class="btn btn-light" onclick="history.back()">
+                            <i class="fas fa-arrow-left"></i>
+                            戻る
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+</body>
+</html>

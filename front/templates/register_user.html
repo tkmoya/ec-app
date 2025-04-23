@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録 | ECサイト</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <script type="text/javascript">
+        function clearFormAll() {
+            for (var i = 0; i < document.forms.length; ++i) {
+                clearForm(document.forms[i]);
+            }
+        }
+
+        function clearForm(form) {
+            for (var i = 0; i < form.elements.length; ++i) {
+                clearElement(form.elements[i]);
+            }
+        }
+
+        function clearElement(element) {
+            switch (element.type) {
+                case "hidden":
+                case "submit":
+                case "reset":
+                case "button":
+                case "image":
+                    return;
+                case "file":
+                    return;
+                case "text":
+                case "password":
+                case "textarea":
+                    element.value = "";
+                    return;
+                case "checkbox":
+                case "radio":
+                    element.checked = false;
+                    return;
+                case "select-one":
+                case "select-multiple":
+                    element.selectedIndex = 0;
+                    return;
+                default:
+            }
+        }
+    </script>
+
+    <!--    <link rel="stylesheet" href="./css/footer.css" />-->
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+<header th:fragment="pageHeader">
+    <div class="site-title">
+        <a href="/">ECショップ</a></div>
+    <div class="mr-16">
+        <th:block th:if="${session['userId'] == null}">
+            「ゲスト」さん
+        </th:block>
+        <th:block th:if="${session['userId'] != null}">
+            「 [[${session.editFormModel.name}]] 」さん
+        </th:block>
+    </div>
+
+</header>
+<main>
+<div class="container">
+    <h1 class="page-title">
+        <i class="fas fa-user-plus"></i>
+        新規会員登録
+    </h1>
+
+    <div class="inner-container">
+        <form id="registerForm" action="register_check" method="POST" th:object="${registerFormModel}">
+            <div class="form-section">
+                <h2 class="section-title">会員情報入力</h2>
+
+                <div class="form-group">
+                    <label for="name" class="form-label required">氏名</label>
+                    <input type="text" id="name" name="name" th:field="*{name}" class="form-control"
+                           placeholder="例：山田 太郎" required>
+                    <span class="form-error" th:errors="*{name}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="pass" class="form-label required">パスワード</label>
+                    <input type="password" id="pass" name="password" class="form-control"
+                           placeholder="8文字以上の英数字" required>
+                    <div class="password-toggle">
+                        <input type="checkbox" id="show-password">
+                        <label for="show-password" class="password-toggle-label">パスワードを表示</label>
+                    </div>
+                    <small class="form-text">8文字以上の英字と数字を組み合わせてください</small>
+                    <span class="form-error" th:errors="*{password}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="passchk" class="form-label required">パスワード（確認用）</label>
+                    <input type="password" id="passchk" name="confPassword" class="form-control"
+                           placeholder="もう一度入力してください" required>
+                    <span class="form-error" th:errors="*{confPassword}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="age" class="form-label">年齢</label>
+                    <input type="text" id="age" name="age" th:field="*{age}" class="form-control age-control"
+                           placeholder="例：30">
+                    <span class="form-error" th:errors="*{age}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="sex" class="form-label">性別</label>
+                    <select id="sex" name="sex" class="gender-control">
+                        <option value="m" selected>男性</option>
+                        <option value="f">女性</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="zip" class="form-label">郵便番号</label>
+                    <div class="input-group">
+                        <input type="text" id="zip" name="zip" th:field="*{zip}" class="form-control zip-control"
+                               placeholder="例：123-4567" maxlength="8">
+                    </div>
+                    <small class="form-text">ハイフン(-)ありでも、なしでも入力できます</small>
+                    <span class="form-error" th:errors="*{zip}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">住所</label>
+                    <textarea id="address" name="address" th:field="*{address}" class="form-control"
+                              placeholder="例：東京都渋谷区渋谷1-1-1 渋谷マンション101"></textarea>
+                    <span class="form-error" th:errors="*{address}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="tel" class="form-label required">電話番号</label>
+                    <input type="text" id="tel" name="tel" th:field="*{tel}" class="form-control tel-control"
+                           placeholder="例：03-1234-5678" required>
+                    <small class="form-text">ハイフン(-)ありでも、なしでも入力できます</small>
+                    <span class="form-error" th:errors="*{tel}"></span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check-circle"></i>
+                    確認する
+                </button>
+                <button type="button" class="btn btn-light" onclick="clearFormAll();">
+                    <i class="fas fa-eraser"></i>
+                    クリア
+                </button>
+                <button type="button" class="btn btn-light" onclick="location.href='menu'">
+                    <i class="fas fa-arrow-left"></i>
+                    戻る
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</main>
+<footer th:fragment="pageFooter">
+    <p>&copy; 2025 ECショップ All Rights Reserved.</p>
+</footer>
+    <th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+
+<script>
+    // パスワード表示切替
+    document.getElementById('show-password').addEventListener('change', function () {
+        const passwordField = document.getElementById('pass');
+        const confirmField = document.getElementById('passchk');
+
+        if (this.checked) {
+            passwordField.type = 'text';
+            confirmField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+            confirmField.type = 'password';
+        }
+    });
+
+    // 郵便番号による住所検索（デモ用）
+    document.getElementById('zip-search').addEventListener('click', function () {
+        const zipcode = document.getElementById('zip').value.replace('-', '');
+
+        // デモとして、特定の郵便番号の場合のみ住所を自動入力
+        if (zipcode === '1234567') {
+            document.getElementById('address').value = '東京都渋谷区渋谷1-1-1';
+            alert('住所が見つかりました');
+        } else {
+            alert('該当する住所が見つかりませんでした');
+        }
+    });
+</script>
+</body>
+</html>

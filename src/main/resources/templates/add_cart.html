@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ショッピングカート | ECサイト</title>
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+<main>
+    <div class="container con-w">
+        <h1 class="page-title">
+            <i class="fas fa-shopping-cart"></i>
+            カート
+        </h1>
+
+        <div class="inner-container">
+            <table class="cart-table">
+                <thead>
+                <tr>
+                    <th>商品コード</th>
+                    <th>商品名</th>
+                    <th>販売元</th>
+                    <th>価格</th>
+                    <th>購入数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="product : ${session.selectProductMap}">
+                    <tr>
+                        <td>[[${product.key}]]</td>
+                        <td>[[${product.value.productName}]]</td>
+                        <td>[[${product.value.maker}]]</td>
+                        <td>[[${product.value.unitPrice}]]</td>
+                        <td>[[${product.value.productCnt}]]</td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+
+            <div class="btn-group">
+                <button type="button" onclick="history.back()" class="btn btn-light">
+                    <i class="fas fa-arrow-left"></i>
+                    戻る
+                </button>
+                <button type="button" onclick="location.href='cart_list'" class="btn btn-success">
+                    <i class="fas fa-shopping-cart"></i>
+                    カートを見る
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+</body>
+</html>

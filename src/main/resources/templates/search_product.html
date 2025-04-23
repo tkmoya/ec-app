@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品検索 | ECサイト</title>
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript">
+        function clearFormAll() {
+            for (var i = 0; i < document.forms.length; ++i) {
+                clearForm(document.forms[i]);
+            }
+        }
+
+        function clearForm(form) {
+            for (var i = 0; i < form.elements.length; ++i) {
+                clearElement(form.elements[i]);
+            }
+        }
+
+        function clearElement(element) {
+            switch (element.type) {
+                case "hidden":
+                case "submit":
+                case "reset":
+                case "button":
+                case "image":
+                    return;
+                case "file":
+                    return;
+                case "text":
+                case "password":
+                case "textarea":
+                    element.value = "";
+                    return;
+                case "checkbox":
+                case "radio":
+                    element.checked = false;
+                    return;
+                case "select-one":
+                case "select-multiple":
+                    element.selectedIndex = 0;
+                    return;
+                default:
+            }
+        }
+    </script>
+</head>
+<body>
+<th:block th:insert="~{layout/_Header :: pageHeader}"></th:block>
+
+<main>
+    <div class="container con-w">
+        <h1 class="page-title">商品検索</h1>
+
+        <div class="inner-container mb-2">
+            <form action="search_product" method="POST" id="searchForm" th:object="${searchProductModel}"
+                  class="search-form">
+                <div class="form-group">
+                    <label for="categoryId" class="form-label">カテゴリ</label>
+                    <select id="categoryId" name="categoryId" class="form-control">
+                        <option value="" selected>全て</option>
+                        <th:block th:each="category : ${categoryList}">
+                            <th:block th:if="${category.ctgrId == searchProductModel.categoryId}">
+                                <option th:value="${category.ctgrId}" selected>[[${category.ctgrId}]]</option>
+                            </th:block>
+                            <th:block th:if="${category.ctgrId != searchProductModel.categoryId}">
+                                <option th:value="${category.ctgrId}">[[${category.ctgrId}]]</option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productName" class="form-label">商品名</label>
+                    <input type="text" id="productName" name="productName" th:field="*{productName}"
+                           class="form-control"
+                           placeholder="商品名を入力">
+                    <span class="error-message" th:errors="*{productName}">error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="maker" class="form-label">販売元</label>
+                    <input type="text" id="maker" name="maker" th:field="*{maker}" class="form-control"
+                           placeholder="販売元を入力">
+                    <span class="error-message" th:errors="*{maker}">error</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">金額範囲</label>
+                    <div class="price-range">
+                        <input type="text" id="unitPriceMin" name="unitPriceMin" th:field="*{unitPriceMin}"
+                               class="form-control price-input" placeholder="下限">
+                        <span>～</span>
+                        <input type="text" id="unitPriceMax" name="unitPriceMax" th:field="*{unitPriceMax}"
+                               class="form-control price-input" placeholder="上限">
+                    </div>
+                    <span class="error-message" th:errors="*{unitPriceMin}">error</span>
+                    <span class="error-message" th:errors="*{unitPriceMax}">error</span>
+                    <span class="error-message" th:errors="*{checkMax}">error</span>
+                </div>
+
+                <div class="btn-group flex-end">
+                    <button type="button" class="btn btn-light" onclick="clearFormAll();">
+                        <i class="fas fa-eraser"></i>
+                        クリア
+                    </button>
+                    <button type="button" class="btn btn-light" onclick="location.href='menu'">
+                        <i class="fas fa-arrow-left"></i>
+                        戻る
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                        検索
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="results-container">
+            <div class="results-header">
+                <div class="results-title">商品一覧</div>
+                <th:block th:if="${totalPage != null}">
+                    <div class="results-count">[[${pageCnt}]] ページ目 / [[${totalPage}]]</div>
+                </th:block>
+            </div>
+
+            <form action="select_product" method="POST" id="choiseForm">
+                <table class="product-table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all" class="select-checkbox"></th>
+                        <th>商品コード</th>
+                        <th>商品名</th>
+                        <th>販売元</th>
+                        <th>単価</th>
+                        <th>購入数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="product : ${viewPage}">
+                        <tr>
+                            <td><input type="checkbox" name="selectProductCode" th:value="${product.productCode}"
+                                       class="select-checkbox"></td>
+                            <td>[[${product.productCode}]]</td>
+                            <td><a th:href="|product_detail?productCode=${product.productCode}|"
+                                   class="product-name-link">[[${product.productName}]]</a>
+                            </td>
+                            <td>[[${product.maker}]]</td>
+                            <td>[[${product.unitPrice}]]</td>
+                            <td><input type="text" th:name="${product.productCode}" th:value="${product.productCnt}"
+                                       class="quantity-input"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
+                <th:block th:if="${totalPage != null}">
+                    <div class="pagination">
+                        <a th:href="|search_product?pageCnt=${pageCnt - 1}|" class="page-link">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <span class="page-link active">[[${pageCnt}]]</span>
+                        <a th:href="|search_product?pageCnt=${pageCnt + 1}|" class="page-link">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="cart-button-container">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-shopping-cart"></i>
+                            カートに入れる
+                        </button>
+                    </div>
+                </th:block>
+                <th:block th:if="${totalPage == null}">
+                    <div class="text-center py-4">
+                        <p>条件に該当する商品は0件です。</p>
+                    </div>
+                </th:block>
+                <span id="choiseErrMesse" class="error-message">[[${error}]]</span>
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block th:insert="~{layout/_Footer :: pageFooter}"></th:block>
+
+<script>
+    // 全選択チェックボックスの処理
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('tbody .select-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+</script>
+</body>
+</html>
